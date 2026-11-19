@@ -10,7 +10,7 @@
 <main class="app">
   <section class="controls">
     <h1>Vice Cover Studio</h1>
-    
+
     <div class="group">
       <h3>Layout</h3>
       <select id="layout">
@@ -18,7 +18,7 @@
         <option value="grid9">9-Panel Grid</option>
         <option value="tilted">Tilted Snapshot</option>
         <option value="hero3">Hero + 3</option>
-        <option value="full" selected>Full Bleed</option>
+        <option value="full">Full Bleed</option>
       </select>
     </div>
 
@@ -50,10 +50,21 @@
 
     <div class="group">
       <h3>Title</h3>
-      <input id="caption" type="text" maxlength="40" value="VICE CITY">
+      <input id="caption" type="text" maxlength="40" value="Sunset Heist">
     </div>
 
-    <button id="export" type="button" class="primary">Export PNG</button>
+    <div class="export-controls">
+      <button id="export" type="button" class="primary">Export PNG</button>
+      <button id="export-all" type="button" class="ghost">Export All</button>
+      <label>Export Size
+        <select id="export-size">
+          <option value="1080x1080">1080 x 1080</option>
+          <option value="1080x1350">1080 x 1350</option>
+          <option value="1920x1080">1920 x 1080</option>
+        </select>
+      </label>
+    </div>
+    <p id="status" role="status"></p>
   </section>
   <div class="canvas-wrap">
     <canvas id="cover" width="1080" height="1080"></canvas>

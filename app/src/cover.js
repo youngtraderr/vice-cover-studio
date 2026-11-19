@@ -60,6 +60,11 @@ export function drawCover(canvas, photo, caption, layout, grade, grain, vignette
     const p = ps[0];
     if (photo) {
       ctx.save();
+      if (selectedIndex === 0) {
+        ctx.strokeStyle = '#ff2e88';
+        ctx.lineWidth = 10;
+        ctx.strokeRect(p.x, p.y, p.w, p.h);
+      }
       ctx.translate(w / 2, h / 2);
       ctx.rotate(p.tilt || 0);
       ctx.scale(p.zoom, p.zoom);
