@@ -4,6 +4,8 @@ const canvas = document.getElementById('cover');
 const captionInput = document.getElementById('caption');
 const layoutSelect = document.getElementById('layout');
 const gradeSelect = document.getElementById('grade');
+const grainCheck = document.getElementById('grain');
+const vignetteCheck = document.getElementById('vignette');
 let photo = null;
 
 async function loadImage(url) {
@@ -16,7 +18,7 @@ async function loadImage(url) {
 }
 
 function redraw() {
-  drawCover(canvas, photo, captionInput.value, layoutSelect.value, gradeSelect.value);
+  drawCover(canvas, photo, captionInput.value, layoutSelect.value, gradeSelect.value, grainCheck.checked, vignetteCheck.checked);
 }
 
 document.getElementById('photo').addEventListener('change', async (e) => {
@@ -29,6 +31,8 @@ document.getElementById('photo').addEventListener('change', async (e) => {
 captionInput.addEventListener('input', redraw);
 layoutSelect.addEventListener('change', redraw);
 gradeSelect.addEventListener('change', redraw);
+grainCheck.addEventListener('change', redraw);
+vignetteCheck.addEventListener('change', redraw);
 
 document.getElementById('export').addEventListener('click', () => {
   const data = canvas.toDataURL('image/png');
