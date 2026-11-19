@@ -1,5 +1,5 @@
 import { drawCover, getLayoutPanels } from './cover.js';
-import { runShot } from './shots.js';
+import { runShot, loadCoverFonts } from './shots.js';
 
 const canvas = document.getElementById('cover');
 const photoInput = document.getElementById('photo');
@@ -16,6 +16,9 @@ const exportBtn = document.getElementById('export');
 const exportAllBtn = document.getElementById('export-all');
 const exportSizeSelect = document.getElementById('export-size');
 const status = document.getElementById('status');
+const pickPhotoBtn = document.getElementById('pick-photo');
+const photoNameEl = document.getElementById('photo-name');
+const panelLabel = document.getElementById('panel-label');
 
 let photo = null;
 let panels = [];
@@ -47,6 +50,7 @@ function redraw() {
 
 function syncControls() {
   const p = panels[selectedIndex];
+  panelLabel.textContent = panels.length ? `${selectedIndex + 1} of ${panels.length}` : '—';
   if (!p) return;
   zoomInp.value = String(p.zoom);
   panXInp.value = String(p.px);
@@ -147,12 +151,15 @@ canvas.addEventListener('wheel', (e) => {
 photoInput.addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
+  photoNameEl.textContent = file.name;
   photo = await loadImage(URL.createObjectURL(file));
   panels = currentPanels();
   selectedIndex = 0;
   redraw();
   syncControls();
 });
+
+pickPhotoBtn.addEventListener('click', () => photoInput.click());
 
 layoutSelect.addEventListener('change', () => {
   panels = currentPanels();
@@ -219,6 +226,7 @@ exportAllBtn.addEventListener('click', exportAll);
 
 async function loadSample(url, text) {
   photo = await loadImage(url);
+  photoNameEl.textContent = `Sample photo: ${url.split('/').pop()}`;
   if (text) captionInput.value = text;
   panels = currentPanels();
   redraw();
@@ -231,12 +239,14 @@ async function init() {
   if (shot) {
     runShot(shot, params, async (url, text) => {
       photo = await loadImage(url);
+      photoNameEl.textContent = `Sample photo: ${url.split('/').pop()}`;
       if (text) captionInput.value = text;
       panels = currentPanels();
       redraw();
       syncControls();
     });
   } else {
+    await loadCoverFonts();
     await loadSample('samples/pier.jpg', 'Sunset Heist');
   }
 }

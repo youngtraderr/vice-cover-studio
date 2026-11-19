@@ -133,11 +133,41 @@ export function drawCover(canvas, photo, caption, layout, grade, grain, vignette
     ctx.putImageData(imgData, 0, 0);
   }
 
-  // Halftone title block
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-  ctx.fillRect(w * 0.1, h * 0.8, w * 0.8, h * 0.15);
-  ctx.fillStyle = '#000';
-  ctx.font = 'bold 80px Anton';
+  // Halftone title block: dotted band with the title in Anton and a script subtitle.
+  const bandY = h * 0.78;
+  const bandH = h * 0.18;
+  ctx.save();
+  ctx.fillStyle = 'rgba(12, 8, 20, 0.86)';
+  ctx.fillRect(0, bandY, w, bandH);
+  // Halftone dots inside the band
+  const dot = Math.max(3, h * 0.006);
+  ctx.fillStyle = 'rgba(255, 60, 140, 0.35)';
+  for (let gy = bandY + dot; gy < bandY + bandH; gy += dot * 3) {
+    for (let gx = dot; gx < w; gx += dot * 3) {
+      ctx.beginPath();
+      ctx.arc(gx, gy, dot * 0.55, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  const title = caption.trim().toUpperCase() || 'VICE';
+  // Fit the title to the band width with Anton.
+  let size = bandH * 0.62;
+  ctx.font = `${size}px Anton, "Arial Narrow", sans-serif`;
+  while (ctx.measureText(title).width > w * 0.86 && size > 8) {
+    size -= 2;
+    ctx.font = `${size}px Anton, "Arial Narrow", sans-serif`;
+  }
   ctx.textAlign = 'center';
-  ctx.fillText(caption.trim().toUpperCase(), w / 2, h * 0.9);
+  ctx.textBaseline = 'alphabetic';
+  // Neon drop shadow behind the letters
+  ctx.shadowColor = 'rgba(255, 40, 130, 0.95)';
+  ctx.shadowBlur = size * 0.28;
+  ctx.fillStyle = '#fff5fb';
+  ctx.fillText(title, w / 2, bandY + bandH * 0.74);
+  ctx.shadowBlur = 0;
+  // Script subtitle above the title
+  ctx.font = `${bandH * 0.26}px Pacifico, cursive`;
+  ctx.fillStyle = 'rgba(120, 230, 255, 0.95)';
+  ctx.fillText('vice city nights', w / 2, bandY + bandH * 0.26);
+  ctx.restore();
 }
