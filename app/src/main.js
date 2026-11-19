@@ -2,6 +2,7 @@ import { drawCover, getLayoutPanels } from './cover.js';
 import { runShot } from './shots.js';
 
 const canvas = document.getElementById('cover');
+const photoInput = document.getElementById('photo');
 const captionInput = document.getElementById('caption');
 const layoutSelect = document.getElementById('layout');
 const gradeSelect = document.getElementById('grade');
